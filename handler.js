@@ -14,6 +14,8 @@ async function parseCSV(event) {
 
   let promise = new Promise((resolve, reject) => {
 
+    checkInput(event, reject);
+
     var csvStream = csv2.createStream({});
     var rows = [];
     var options = event.url;
@@ -47,4 +49,18 @@ async function parseCSV(event) {
 
   let result = await promise; // wait till the promise resolves (*)
   return result
+
+ 
+}
+
+function checkInput(event ,reject) {
+  if (!event?.url) {
+    reject(new Error("Please provide a URL"));
+  }
+
+  const expression = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
+  const regex = new RegExp(expression);
+  if (!event.url.match(regex) || !event.url.match(regex).length) {
+    reject(new Error("URL invalid: " + event.url));
+  }
 }
