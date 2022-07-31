@@ -28,7 +28,8 @@ async function parseCSV(event) {
       .on('data', function (data) {
         // outputs an object containing a set of key/value pair representing a line found in the csv file.
        // console.log(data);
-       rows.push({"data": JSON.stringify(data)})
+       //rows.push({"data": JSON.stringify(data)})
+       rows.push(data)
 
       })
       .on('column', function (key, value) {
